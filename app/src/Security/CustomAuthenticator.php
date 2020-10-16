@@ -84,6 +84,8 @@ class CustomAuthenticator extends AbstractFormLoginAuthenticator implements Pass
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param $credentials
+     * @return string|null
      */
     public function getPassword($credentials): ?string
     {
@@ -96,8 +98,7 @@ class CustomAuthenticator extends AbstractFormLoginAuthenticator implements Pass
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('contacts'));
     }
 
     protected function getLoginUrl()
