@@ -22,8 +22,12 @@ class ContactController extends AbstractController
      */
     public function index(ContactRepository $contactRepository): Response
     {
+        $userId = $this->getUser()->getId();
+
         return $this->render('contacts/index.html.twig', [
-            'contacts' => $contactRepository->findAll(),
+            'contacts' => $contactRepository->findBy([
+                'user_id_saved' => $userId,
+            ]),
         ]);
     }
 
@@ -34,8 +38,12 @@ class ContactController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $userId = $this->getUser()->getId();
+
         $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact, [
+            'userId' => $userId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -43,7 +51,7 @@ class ContactController extends AbstractController
             $entityManager->persist($contact);
             $entityManager->flush();
 
-            return $this->redirectToRoute('contact_index');
+            return $this->redirectToRoute('contacts');
         }
 
         return $this->render('contacts/new.html.twig', [
@@ -78,7 +86,7 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('contact_index');
+            return $this->redirectToRoute('contacts');
         }
 
         return $this->render('contacts/edit.html.twig', [
@@ -101,6 +109,6 @@ class ContactController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('contact_index');
+        return $this->redirectToRoute('contacts');
     }
 }
