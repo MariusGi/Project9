@@ -68,7 +68,7 @@ class ContactController extends AbstractController
     public function show(Contact $contact): Response
     {
         return $this->render('contacts/show.html.twig', [
-            'contacts' => $contact,
+            'contact' => $contact,
         ]);
     }
 
@@ -80,7 +80,11 @@ class ContactController extends AbstractController
      */
     public function edit(Request $request, Contact $contact): Response
     {
-        $form = $this->createForm(ContactType::class, $contact);
+        $userId = $this->getUser()->getId();
+
+        $form = $this->createForm(ContactType::class, $contact, [
+            'userId' => $userId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -90,7 +94,7 @@ class ContactController extends AbstractController
         }
 
         return $this->render('contacts/edit.html.twig', [
-            'contacts' => $contact,
+            'contact' => $contact,
             'form' => $form->createView(),
         ]);
     }
