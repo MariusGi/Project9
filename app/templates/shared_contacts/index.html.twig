@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SharedContacts index{% endblock %}
+
+{% block body %}
+    <h1>SharedContacts index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contact_id</th>
+                <th>User_id_shared_to</th>
+                <th>User_id_shared_by</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for shared_contact in shared_contacts %}
+            <tr>
+                <td>{{ shared_contact.id }}</td>
+                <td>{{ shared_contact.contactId }}</td>
+                <td>{{ shared_contact.userIdSharedTo }}</td>
+                <td>{{ shared_contact.userIdSharedBy }}</td>
+                <td>
+                    <a href="{{ path('shared_contacts_show', {'id': shared_contact.id}) }}">show</a>
+                    <a href="{{ path('shared_contacts_edit', {'id': shared_contact.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('shared_contacts_new') }}">Create new</a>
+{% endblock %}

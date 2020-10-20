@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SharedContacts{% endblock %}
+
+{% block body %}
+    <h1>Create new SharedContacts</h1>
+
+    {{ include('shared_contacts/_form.html.twig') }}
+
+    <a href="{{ path('shared_contacts') }}">back to list</a>
+{% endblock %}
