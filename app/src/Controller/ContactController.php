@@ -42,7 +42,7 @@ class ContactController extends AbstractController
 
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact, [
-            'userId' => $userId,
+            'user_id_saved' => $userId,
         ]);
         $form->handleRequest($request);
 
@@ -83,7 +83,7 @@ class ContactController extends AbstractController
         $userId = $this->getUser()->getId();
 
         $form = $this->createForm(ContactType::class, $contact, [
-            'userId' => $userId,
+            'user_id_saved' => $userId,
         ]);
         $form->handleRequest($request);
 
