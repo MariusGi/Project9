@@ -26,7 +26,7 @@ class ContactController extends AbstractController
 
         return $this->render('contacts/index.html.twig', [
             'contacts' => $contactRepository->findBy([
-                'user_id_saved' => $userId,
+                'user_id_saved_to' => $userId,
             ]),
         ]);
     }
@@ -42,7 +42,7 @@ class ContactController extends AbstractController
 
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact, [
-            'user_id_saved' => $userId,
+            'user_id_saved_to' => $userId,
         ]);
         $form->handleRequest($request);
 
@@ -83,7 +83,7 @@ class ContactController extends AbstractController
         $userId = $this->getUser()->getId();
 
         $form = $this->createForm(ContactType::class, $contact, [
-            'user_id_saved' => $userId,
+            'user_id_saved_to' => $userId,
         ]);
         $form->handleRequest($request);
 

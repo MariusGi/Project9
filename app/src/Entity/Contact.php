@@ -30,12 +30,7 @@ class Contact
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $user_id_saved;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $user_id_shared;
+    private $user_id_saved_to;
 
     public function getId(): ?int
     {
@@ -66,26 +61,14 @@ class Contact
         return $this;
     }
 
-    public function getUserIdSaved(): ?int
+    public function getUserIdSavedTo(): ?int
     {
-        return $this->user_id_saved;
+        return $this->user_id_saved_to;
     }
 
-    public function setUserIdSaved(?int $user_id_saved): self
+    public function setUserIdSavedTo(?int $user_id_saved_to): self
     {
-        $this->user_id_saved = $user_id_saved;
-
-        return $this;
-    }
-
-    public function getUserIdShared(): ?int
-    {
-        return $this->user_id_shared;
-    }
-
-    public function setUserIdShared(?int $user_id_shared): self
-    {
-        $this->user_id_shared = $user_id_shared;
+        $this->user_id_saved_to = $user_id_saved_to;
 
         return $this;
     }

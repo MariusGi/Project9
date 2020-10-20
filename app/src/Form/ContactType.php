@@ -15,11 +15,8 @@ class ContactType extends AbstractType
         $builder
             ->add('name')
             ->add('phone')
-            ->add('user_id_saved', HiddenType::class, [
-                'data' => $options['user_id_saved'],
-            ])
-            ->add('user_id_shared', HiddenType::class, [
-                'data' => $options['user_id_shared'],
+            ->add('user_id_saved_to', HiddenType::class, [
+                'data' => $options['user_id_saved_to'],
             ])
         ;
     }
@@ -28,8 +25,7 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Contact::class,
-            'user_id_saved' => 0,
-            'user_id_shared' => 0,
+            'user_id_saved_to' => 0,
         ]);
     }
 }
