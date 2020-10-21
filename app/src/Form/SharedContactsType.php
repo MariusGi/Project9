@@ -4,18 +4,22 @@ namespace App\Form;
 
 use App\Entity\SharedContacts;
 use App\Repository\ContactRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharedContactsType extends AbstractType
 {
     private $contactRepository;
+    private $userRepository;
 
-    public function __construct(ContactRepository $contactRepository)
+    public function __construct(ContactRepository $contactRepository, UserRepository $userRepository)
     {
         $this->contactRepository = $contactRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -24,8 +28,12 @@ class SharedContactsType extends AbstractType
             ->add('contact_id', ChoiceType::class, [
                 'choices' => $this->getCurrentUserSavedNameIdArr($options['user_id_shared_by'])
             ])
-            ->add('user_id_shared_to')
-            ->add('user_id_shared_by')
+            ->add('user_id_shared_to', ChoiceType::class, [
+                'choices' => $this->getAvailableUsersToShareContact($options['user_id_shared_by'])
+            ])
+            ->add('user_id_shared_by', HiddenType::class, [
+                'data' => $options['user_id_shared_by'],
+            ])
         ;
     }
 
@@ -33,7 +41,6 @@ class SharedContactsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => SharedContacts::class,
-            'user_id_shared_to' => 0,
             'user_id_shared_by' => 0,
         ]);
     }
@@ -53,6 +60,32 @@ class SharedContactsType extends AbstractType
             $savedUsersArr[$contactNameDisplayed] = $id;
         }
 
+        if (empty($savedUsersArr)) {
+            $savedUsersArr['0|No saved contacts to share'] = 0;
+        }
+
         return $savedUsersArr;
+    }
+
+    private function getAvailableUsersToShareContact($userIdsToExcludeArr)
+    {
+        $availableContactsToShareArr = [];
+
+        $availableContactsToShareData = $this->userRepository->findAllExcludingIds([
+            $userIdsToExcludeArr
+        ]);
+
+        foreach ($availableContactsToShareData as $availableContactToShareData) {
+            $id = $availableContactToShareData->getId();
+            $email = $availableContactToShareData->getEmail();
+            $contactEmailDisplayed = $id . '|' . $email;
+            $availableContactsToShareArr[$contactEmailDisplayed] = $id;
+        }
+
+        if (empty($availableContactsToShareArr)) {
+            $availableContactsToShareArr['0|No contacts to share to'] = 0;
+        }
+
+        return $availableContactsToShareArr;
     }
 }

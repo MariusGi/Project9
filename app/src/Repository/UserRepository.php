@@ -36,6 +36,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    public function findAllExcludingIds(array $idsToExclude)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id NOT IN(:val)')
+            ->setParameter('val', $idsToExclude)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
