@@ -34,8 +34,12 @@ class SharedContactsController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $userId = $this->getUser()->getId();
+
         $sharedContact = new SharedContacts();
-        $form = $this->createForm(SharedContactsType::class, $sharedContact);
+        $form = $this->createForm(SharedContactsType::class, $sharedContact, [
+            'user_id_shared_by' => $userId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

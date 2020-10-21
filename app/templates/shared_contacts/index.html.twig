@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Contact_id</th>
                 <th>User_id_shared_to</th>
                 <th>User_id_shared_by</th>
@@ -18,7 +17,6 @@
         <tbody>
         {% for shared_contact in shared_contacts %}
             <tr>
-                <td>{{ shared_contact.id }}</td>
                 <td>{{ shared_contact.contactId }}</td>
                 <td>{{ shared_contact.userIdSharedTo }}</td>
                 <td>{{ shared_contact.userIdSharedBy }}</td>
