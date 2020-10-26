@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Repository\ContactRepository;
+use App\Repository\SharedContactsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +19,20 @@ class ContactController extends AbstractController
     /**
      * @Route("/", name="contacts", methods={"GET"})
      * @param ContactRepository $contactRepository
+     * @param SharedContactsRepository $sharedContactsRepository
      * @return Response
      */
-    public function index(ContactRepository $contactRepository): Response
+    public function index(ContactRepository $contactRepository, SharedContactsRepository $sharedContactsRepository): Response
     {
         $userId = $this->getUser()->getId();
+        $sharedContactsArr = array_column($sharedContactsRepository->findBySharedToAndReturnContactId($userId), 'contact_id');
 
         return $this->render('contacts/index.html.twig', [
             'contacts' => $contactRepository->findBy([
                 'user_id_saved_to' => $userId,
+            ]),
+            'shared_contacts' => $contactRepository->findBy([
+                'id' => $sharedContactsArr,
             ]),
         ]);
     }

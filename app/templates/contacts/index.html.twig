@@ -22,11 +22,15 @@
                     <a href="{{ path('contact_edit', {'id': contact.id}) }}">edit</a>
                 </td>
             </tr>
-        {% else %}
+        {% endfor %}
+
+        {% for shared_contact in shared_contacts %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td>{{ shared_contact.name }}</td>
+                <td>{{ shared_contact.phone }}</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
 

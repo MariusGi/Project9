@@ -19,6 +19,17 @@ class SharedContactsRepository extends ServiceEntityRepository
         parent::__construct($registry, SharedContacts::class);
     }
 
+    public function findBySharedToAndReturnContactId(int $userIdSharedTo)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s.contact_id')
+            ->andWhere('s.user_id_shared_to = :val')
+            ->setParameter('val', $userIdSharedTo)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return SharedContacts[] Returns an array of SharedContacts objects
     //  */

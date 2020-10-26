@@ -22,8 +22,12 @@ class SharedContactsController extends AbstractController
      */
     public function index(SharedContactsRepository $sharedContactsRepository): Response
     {
+        $userId = $this->getUser()->getId();
+
         return $this->render('shared_contacts/index.html.twig', [
-            'shared_contacts' => $sharedContactsRepository->findAll(),
+            'shared_contacts' => $sharedContactsRepository->findBy([
+                'user_id_shared_by' => $userId,
+            ]),
         ]);
     }
 
@@ -65,29 +69,6 @@ class SharedContactsController extends AbstractController
     {
         return $this->render('shared_contacts/show.html.twig', [
             'shared_contact' => $sharedContact,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="shared_contacts_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param SharedContacts $sharedContact
-     * @return Response
-     */
-    public function edit(Request $request, SharedContacts $sharedContact): Response
-    {
-        $form = $this->createForm(SharedContactsType::class, $sharedContact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('shared_contacts');
-        }
-
-        return $this->render('shared_contacts/edit.html.twig', [
-            'shared_contact' => $sharedContact,
-            'form' => $form->createView(),
         ]);
     }
 
