@@ -9,5 +9,7 @@ LINUX LAUNCH:
 3. docker-compose up -d -build
 4. apt install php-xml (if you don't have php-xml)
 5. composer install
-6. php bin/console doctrine:database:create
-7, php bin/console doctrine:migrations:migrate
+6. touch .env
+7. copy-paste config from github .env file
+8. php bin/console doctrine:database:create
+9. php bin/console doctrine:migrations:migrate
